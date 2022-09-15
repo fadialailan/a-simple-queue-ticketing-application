@@ -3,14 +3,20 @@ const express = require("express");
 const http = require("http");
 const socketio = require("socket.io");
 const {QUEUE} = require("./src/queue");
+const cors = require("cors");
 
 //get the port number from environment variable if there is one, if there isn't then it will be 3000
 const port = process.env.PORT || 3000;
 
 //setup express and socket.io
 const app = express();
+app.use(cors());
+
+
 const server = http.createServer(app);
 const io = socketio(server);
+
+
 
 //setup the global variables
 const mainQueue = new QUEUE();
