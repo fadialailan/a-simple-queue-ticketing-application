@@ -6,13 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>customer view</title>
     <link rel="stylesheet" type="text/css" href="/src/style.css">
+    
+    <script defer src="/src/socket.io.js"></script>
+    <script defer src="/src/fake_errors_remover.js"></script>
+    <script defer src="/src/customer.js"></script>
 </head>
 <body>
     <h1>customer view</h1>
     <div id="serving-container">
         Now Serving: 28392328<br>
-        Last Number: 98038743<br>
-        <button>take a number</button>
+        <span id="last-number">Last Number: 98038743</span><br>
+        <button id="main-button">take a number</button>
         
     </div>
 
