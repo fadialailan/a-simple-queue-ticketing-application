@@ -1,27 +1,37 @@
 const socket = io("http://localhost:3000/");
 
 
-//request data
-socket.emit("get_surver_data", "customer");
+//request data and connect to the customer room
+socket.emit("get_surver_data_and_connect", "customer");
 
+//runs when recieving the servers main state data 
 socket.on("get_surver_data", data => {
     updateLastNumber(data.lastNumber);
+    updateNowServing(data.nowServing);
     updateAllCounters(data);
 });
 
+//run when a new ticket was issued by another client
 socket.on("update_last_ticket", lastNumber => {
     updateLastNumber(lastNumber);
 })
 
+//runs when a ticket requested by this client is issued
 socket.on("new_ticket_issued", newNumber => {
     updateLastNumber(newNumber);
-    showNewNumber(newNumber)
+    showNewTicketNumber(newNumber)
 });
 
+//runs when a counter preforms an action
 socket.on("handle_ticket", (current_ticket, counter_name) => {
+    if (current_ticket !== "" && current_ticket !== "offline"){
+        updateNowServing(current_ticket);
+    }
+
     updatCounterInformation(current_ticket, counter_name);
 });
 
+//add an event listener to the main button
 const mainButton = document.getElementById("main-button");
 
 mainButton.addEventListener("click", (event) => {
@@ -29,18 +39,42 @@ mainButton.addEventListener("click", (event) => {
     socket.emit("new_ticket");
 })
 
+/**
+ * updates the Last Number display 
+ * @param lastNumber the new last number
+ */
 function updateLastNumber(lastNumber){
     lastNumber = lastNumber || "00000000";
 
     const span = document.getElementById("last-number");
-    span.innerHTML="Last Number: " + lastNumber;
+    span.innerHTML = "Last Number: " + lastNumber;
 }
 
-function showNewNumber(newNumber){
+/**
+ * updates the Now Serving display 
+ * @param nowServing the new now serving number
+ */
+function updateNowServing(nowServing){
+    nowServing = nowServing || "00000000";
+
+    const span = document.getElementById("now-serving");
+    span.innerHTML = "Now Serving: " + nowServing;
+}
+
+/**
+ * show to the client the new number he issued
+ * @param newNumber the new ticket number 
+ */
+function showNewTicketNumber(newNumber){
     const div = document.getElementById("ticket-display");
     div.innerHTML = "your number is: " + newNumber;
 }
 
+/**
+ * a function to update the information of a counter
+ * @param current_ticket the new current ticket of the counter
+ * @param counter_name the counter's name
+ */
 function updatCounterInformation(current_ticket, counter_name) {
     //get counter
     const counter = document.getElementById("counter-"+counter_name);
@@ -71,6 +105,10 @@ function updatCounterInformation(current_ticket, counter_name) {
 
 }
 
+/**
+ * updates all counters (mainly used at the start of the program)
+ * @param data the server's state data
+ */
 function updateAllCounters(data) {
     const COUNTERS_SIZE = 4;
 
