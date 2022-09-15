@@ -1,0 +1,66 @@
+#serving-container {
+    width: fit-content;
+    margin: 0 auto;
+    border: 3px solid black;
+    text-align: center;
+    padding: 20px 30px;
+    font-size: 32px;
+}
+
+.counter {
+    display: inline-block;
+    border: 2px solid black;
+    width: fit-content;
+    text-align: center;
+    margin: 0px 5%;
+}
+
+#counter-1 {
+    margin-left: 0px;
+}
+
+#counter-4 {
+    margin-right: 0px;
+}
+
+#counter-container {
+    text-align: center;
+    margin-top: 20px;
+    width: 100%;
+    
+}
+
+button {
+    font-size: 20px;
+}
+
+.counter-name, .counter-current-number {
+    display: inline-block;
+    
+    
+}
+
+.counter-name {
+    margin: 10px;
+}
+
+.counter-current-number {
+    margin: 10px;
+}
+
+.status-dot {
+    position: relative;
+
+    left: 90%;
+    border-radius: 5px;
+    width: 10px;
+    height: 10px;
+
+    background-color: green;
+}
+
+.go-offline, .complete-current, .call-next {
+    width: 120px;
+    margin: 10px 7px;
+}
+
