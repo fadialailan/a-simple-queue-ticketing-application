@@ -59,8 +59,22 @@ button {
     background-color: green;
 }
 
+.status-dot-used {
+    background-color: red;
+}
+
+.status-dot-offline {
+    background-color: gray;
+}
+
 .go-offline, .complete-current, .call-next {
     width: 120px;
     margin: 10px 7px;
+}
+
+#ticket-display, #queue-meassage {
+    text-align: center;
+    color: red;
+    font-size: 24px;
 }
 

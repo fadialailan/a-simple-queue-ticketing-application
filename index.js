@@ -15,10 +15,7 @@ const io = socketio(server);
 //setup the global variables
 const mainQueue = new QUEUE();
 const systemState = {
-    counter1: null,
-    counter2: null,
-    counter3: null,
-    counter4: null,
+    counters: ["", "", "", ""],
     nowServing: null,
     lastNumber: null
 }
@@ -39,19 +36,40 @@ app.get("/management", (req, res, next) => {
  
 //listen to socket io events
 io.on("connection", socket => {
-    console.log("connect");
-    //socket.emit("new_ticket_issued", "aaaaaa");
  
-    socket.on("get_data", () =>{
-        socket.emit("get_data", systemState);
+    socket.on("get_surver_data", room_name =>{
+        socket.join(room_name);
+        socket.emit("get_surver_data", systemState);
     })
 
     socket.on("new_ticket", () => {
         systemState.lastNumber = issueNewTicket();
         socket.emit("new_ticket_issued", systemState.lastNumber);
-        
+        socket.broadcast.emit("update_last_ticket", systemState.lastNumber);
+    })
+
+    socket.on("call_next", counter_name => {
+        if (mainQueue.size() === 0) {
+            socket.emit("empty_queue");
+            return;
+        }
+        const current_ticket = mainQueue.dequeue();
+        systemState.counters[counter_name-1] = current_ticket;
+        io.to("customer").emit("handle_ticket", current_ticket, counter_name);
+    });
+
+    socket.on("complete_current", counter_name => {
+        systemState.counters[counter_name-1] = "";
+        io.to("customer").emit("handle_ticket", "", counter_name);
+    });
+
+    socket.on("go_offline", counter_name => {
+        systemState.counters[counter_name-1] = "offline";
+        io.to("customer").emit("handle_ticket", "offline", counter_name);
     })
 })
+
+
 
 
 function issueNewTicket() {

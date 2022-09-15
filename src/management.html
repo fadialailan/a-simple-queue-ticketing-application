@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>counter manager</title>
     <link rel="stylesheet" type="text/css" href="/src/style.css">
+    <script defer src="/src/socket.io.js"></script>
+    <script defer src="/src/fake_errors_remover.js"></script>
+    <script defer src="/src/management.js"></script>
 </head>
 <body>
     <h1>counter manager</h1>
@@ -35,8 +38,8 @@
             <button class="complete-current">Comp curr</button><br>
             <button class="call-next">Call Next</button>
         </div>
-            
-
+        <div id="queue-meassage"></div>
+        
     </div>
 </body>
 </html>
